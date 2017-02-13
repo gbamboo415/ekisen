@@ -150,17 +150,21 @@ rika_jouka=$(grep $rika_jouka_t "eki_8ka.txt" | awk '{print $1}')
 echo "裏卦：$(cat eki_64ka.txt | awk -v ge=$rika_geka -v jou=$rika_jouka '$2==jou && $3==ge {print $1,$4,$5}')"
 #
 ## 賓卦を求める（未修正）
-#hinka_t=$(awk '{print NR,$0}' < /tmp/ekisen_ka | 
-#		  sort -k 1nr,1 |
-#		  sed 's/^[0-9]* //' |
-#		  awk '$1==0{$1=5}$1==1{$1=6}$1==2{$1=5}$1==3{$1=6}1' |
-#		  sed -e 's/5/1/' -e 's/6/0/')
-#hinka=$(echo $hinka_t | sed 's/ //g')
-#echo "賓卦：$(grep $hinka "ekikyo.txt" | awk '{print $1,$2,$3}')"
-#
-## 一時ファイルを削除
+hinka=$(cat /tmp/ekisen_ka |
+		awk '{print $6,$5,$4,$3,$2,$1}' |
+		sed -e 's/0/5/g' -e 's/1/6/g' -e 's/2/5/g' -e 's/3/6/g' |
+		sed -e 's/5/1/g' -e 's/6/0/g')
+echo $hinka > /tmp/ekisen_hinka
+hinka_geka_t=$(cat /tmp/ekisen_hinka | awk '{print $1,$2,$3}' | sed 's/ //g' )
+hinka_geka=$(grep $hinka_geka_t "eki_8ka.txt" | awk '{print $1}')
+hinka_jouka_t=$(cat /tmp/ekisen_hinka | awk '{print $4,$5,$6}' | sed 's/ //g' )
+hinka_jouka=$(grep $hinka_jouka_t "eki_8ka.txt" | awk '{print $1}')
+echo "賓卦：$(cat eki_64ka.txt | awk -v ge=$hinka_geka -v jou=$hinka_jouka '$2==jou && $3==ge {print $1,$4,$5}')"
+
+# 一時ファイルを削除
 rm -f /tmp/ekisen_ka
 rm -f /tmp/ekisen_honka
 rm -f /tmp/ekisen_shika
 rm -f /tmp/ekisen_goka
 rm -f /tmp/ekisen_rika
+rm -f /tmp/ekisen_hinka
