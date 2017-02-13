@@ -111,17 +111,21 @@ echo "本卦：$(cat eki_64ka.txt | awk -v ge=$honka_geka -v jou=$honka_jouka '$
 result_view
 
 # 変爻を表示する
-#echo "変爻：$(awk '$1 == 0{printf "%d九 ",NR} $1 == 3{printf "%d六 ",NR}' < /tmp/ekisen_ka |
 echo "変爻：$(cat /tmp/ekisen_ka |
 			  awk '{for(i=1;i<=NF;i++){if($i==0) printf("%d九 ",i); else if($i==3) printf("%d六 ",i);}}' |
 			  sed -e 's/1/初/' -e 's/2/二/' -e 's/3/三/' -e 's/4/四/' -e 's/5/五/' -e 's/6/上/')"
 
-# 之卦を求める（未修正）
-#shika_t=$(awk '$1==0{$1=6}$1==1{$1=6}$1==2{$1=5}$1==3{$1=5}1'< /tmp/ekisen_ka |
-#		  sed -e 's/5/1/' -e 's/6/0/')
-#shika=$(echo $shika_t | sed 's/ //g')
-#echo "之卦：$(grep $shika "ekikyo.txt" | awk '{print $1,$2,$3}')"
-#
+# 之卦を求める
+shika=$(cat /tmp/ekisen_ka |
+		sed -e 's/0/6/g' -e 's/1/6/g' -e 's/2/5/g' -e 's/3/5/g' |
+		sed -e 's/5/1/g' -e 's/6/0/g')
+echo $shika > /tmp/ekisen_shika
+shika_geka_t=$(cat /tmp/ekisen_shika | awk '{print $1,$2,$3}' | sed 's/ //g' )
+shika_geka=$(grep $shika_geka_t "eki_8ka.txt" | awk '{print $1}')
+shika_jouka_t=$(cat /tmp/ekisen_shika | awk '{print $4,$5,$6}' | sed 's/ //g' )
+shika_jouka=$(grep $shika_jouka_t "eki_8ka.txt" | awk '{print $1}')
+echo "之卦：$(cat eki_64ka.txt | awk -v ge=$shika_geka -v jou=$shika_jouka '$2==jou && $3==ge {print $1,$4,$5}')"
+
 ## 互卦を求める（未修正）
 #goka_t1=$(sed -n '2,4p' /tmp/ekisen_ka)
 #goka_t2=$(sed -n '3,5p' /tmp/ekisen_ka)
@@ -147,4 +151,6 @@ echo "変爻：$(cat /tmp/ekisen_ka |
 #echo "賓卦：$(grep $hinka "ekikyo.txt" | awk '{print $1,$2,$3}')"
 #
 ## 一時ファイルを削除
-#rm -f /tmp/ekisen_ka
+rm -f /tmp/ekisen_ka
+rm -f /tmp/ekisen_honka
+rm -f /tmp/ekisen_shika
