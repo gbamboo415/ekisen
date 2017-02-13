@@ -126,15 +126,18 @@ shika_jouka_t=$(cat /tmp/ekisen_shika | awk '{print $4,$5,$6}' | sed 's/ //g' )
 shika_jouka=$(grep $shika_jouka_t "eki_8ka.txt" | awk '{print $1}')
 echo "之卦：$(cat eki_64ka.txt | awk -v ge=$shika_geka -v jou=$shika_jouka '$2==jou && $3==ge {print $1,$4,$5}')"
 
-## 互卦を求める（未修正）
-#goka_t1=$(sed -n '2,4p' /tmp/ekisen_ka)
-#goka_t2=$(sed -n '3,5p' /tmp/ekisen_ka)
-#goka_t=$(echo "$goka_t1\n$goka_t2" |
-#		 awk '$1==0{$1=5}$1==1{$1=6}$1==2{$1=5}$1==3{$1=6}1' |
-#		 sed -e 's/5/1/' -e 's/6/0/')
-#goka=$(echo $goka_t | sed 's/ //g')
-#echo "互卦：$(grep $goka "ekikyo.txt" | awk '{print $1,$2,$3}')"
-#
+# 互卦を求める
+goka=$(cat /tmp/ekisen_ka |
+	   awk '{print $2,$3,$4,$3,$4,$5}' |
+	   sed -e 's/0/5/g' -e 's/1/6/g' -e 's/2/5/g' -e 's/3/6/g' |
+	   sed -e 's/5/1/g' -e 's/6/0/g')
+echo $goka > /tmp/ekisen_goka
+goka_geka_t=$(cat /tmp/ekisen_goka | awk '{print $1,$2,$3}' | sed 's/ //g' )
+goka_geka=$(grep $goka_geka_t "eki_8ka.txt" | awk '{print $1}')
+goka_jouka_t=$(cat /tmp/ekisen_goka | awk '{print $4,$5,$6}' | sed 's/ //g' )
+goka_jouka=$(grep $goka_jouka_t "eki_8ka.txt" | awk '{print $1}')
+echo "互卦：$(cat eki_64ka.txt | awk -v ge=$goka_geka -v jou=$goka_jouka '$2==jou && $3==ge {print $1,$4,$5}')"
+
 ## 裏卦を求める（未修正）
 #rika_t=$(awk '$1==0{$1=6}$1==1{$1=5}$1==2{$1=6}$1==3{$1=5}1'< /tmp/ekisen_ka |
 #		  sed -e 's/5/1/' -e 's/6/0/')
