@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# 乱数の最大値、最小値を設定
+RAND_MIN="$1"
+RAND_MAX="$2"
+
+# 指定された範囲内の乱数を返す
+echo $(($(($(od -A n -t u4 -N 4 /dev/urandom | sed 's/[^0-9]//g') % $(($RAND_MAX - $RAND_MIN)))) + $RAND_MIN))
+
