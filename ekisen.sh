@@ -31,7 +31,7 @@ coin_toss() {
 # サイコロを振る（乱数）
 dice() {
 	RANDNUM=$(od -A n -t u4 -N 4 /dev/urandom | sed 's/[^0-9]//g')
-	return $(($RANDNUM % 2 + 1))
+	return $(($RANDNUM % 6 + 1))
 }
 
 # 爻を求める
