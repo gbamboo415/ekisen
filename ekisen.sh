@@ -10,7 +10,7 @@ PATH='/usr/bin:/bin'
 IFS=$(printf ' \t\n_'); IFS=${IFS%_}
 export IFS LC_ALL=C LANG=C PATH
 
-tmp_ekisen_ka="./ekisen_ka"
+tmp_ekisen_ka="/tmp/ekisen_ka"
 # -------------------------------------
 # 引数処理 ----------------------------
 if [ $# = 1 ]; then
@@ -121,10 +121,10 @@ echo "之卦：$(grep $shika "ekikyo.txt" | awk '{print $1,$2,$3}')"
 # 互卦を求める
 goka_t1=$(sed -n '2,4p' $tmp_ekisen_ka)
 goka_t2=$(sed -n '3,5p' $tmp_ekisen_ka)
-goka_t=$(echo "$goka_t1\n$goka_t2" |
+goka_t=$(echo -e "$goka_t1\n$goka_t2" |
 		 awk '$1==0{$1=5}$1==1{$1=6}$1==2{$1=5}$1==3{$1=6}1' |
 		 sed -e 's/5/1/' -e 's/6/0/')
-goka=$(echo $goka_t | sed 's/ //g')
+goka=$(echo -e $goka_t | sed 's/ //g')
 echo "互卦：$(grep $goka "ekikyo.txt" | awk '{print $1,$2,$3}')"
 
 # 裏卦を求める
