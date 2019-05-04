@@ -124,7 +124,7 @@ goka_t2=$(sed -n '3,5p' $tmp_ekisen_ka)
 goka_t=$(printf "$goka_t1\n$goka_t2" |
 		 awk '$1==0{$1=5}$1==1{$1=6}$1==2{$1=5}$1==3{$1=6}1' |
 		 sed -e 's/5/1/' -e 's/6/0/')
-goka=$(printf $goka_t | sed 's/ //g')
+goka=$(echo $goka_t | sed 's/ //g')
 echo "互卦：$(grep $goka "ekikyo.txt" | awk '{print $1,$2,$3}')"
 
 # 裏卦を求める
