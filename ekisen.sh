@@ -10,7 +10,7 @@ PATH='/usr/bin:/bin'
 IFS=$(printf ' \t\n_'); IFS=${IFS%_}
 export IFS LC_ALL=C LANG=C PATH
 
-tmp_ekisen_ka="/tmp/ekisen_ka"
+tmp_ekisen_ka="/tmp/${0##*/}.$$_ekisen_ka"
 # -------------------------------------
 # 引数処理 ----------------------------
 if [ $# = 1 ]; then
