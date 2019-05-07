@@ -95,7 +95,7 @@ if [ "$coins" = 6 ]; then
 	awk -v hen=$henkou 'NR==hen{
 			if($1==1) $1=3;
 			else if ($1==2) $1=0;
-		}1' < /tmp/ekisen_ka
+		}1' < $tmp_ekisen_ka
 	)
 	echo "$result" > $tmp_ekisen_ka
 fi
