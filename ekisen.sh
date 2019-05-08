@@ -109,8 +109,9 @@ echo "本卦：$(grep $honka "ekikyo.txt" | awk '{print $1,$2,$3}')"
 result_view
 
 # 変爻を表示する
-echo "変爻：$(awk '$1 == 0{printf "%d九 ",NR} $1 == 3{printf "%d六 ",NR}' < $tmp_ekisen_ka | 
-			  sed -e 's/1/初/' -e 's/2/二/' -e 's/3/三/' -e 's/4/四/' -e 's/5/五/' -e 's/6/上/')"
+echo "変爻：$(awk '$1 == 0{printf "九%d ",NR} $1 == 3{printf "六%d ",NR}' < $tmp_ekisen_ka | 
+			  sed -e 's/2/二/' -e 's/3/三/' -e 's/4/四/' -e 's/5/五/' |
+			  sed -e 's/九1/初九/' -e 's/九6/上九/' -e 's/六1/初六/' -e 's/六6/上六/')"
 
 # 之卦を求める
 shika_t=$(awk '$1==0{$1=6}$1==1{$1=6}$1==2{$1=5}$1==3{$1=5}1'< $tmp_ekisen_ka |
